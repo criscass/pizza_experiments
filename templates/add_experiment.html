@@ -4,6 +4,23 @@
 
 {% block content %}
 
-<h2>This is the add experiment page!</h2>
+
+<form action="/add-experiment" method="post">
+  {{ form.csrf_token }}
+  <div class="container text-center">
+    <div class="row">
+      <div class="col-8">
+        {{ form.flour_type.label(class="form-label") }}
+      </div>
+      <div class="col-9">
+        {{ form.flour_type(class="form-control") }}
+      </div>
+      <div class="col-3">
+        {{ form.flour_type(class="form-control") }}
+      </div>
+    </div>
+  {{ form.submit(class="btn btn-secondary") }}
+  </div>
+</form>
 
 {% endblock %}

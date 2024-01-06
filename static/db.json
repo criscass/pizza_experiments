@@ -1,0 +1,44 @@
+[
+  {
+    "flour_type": "caputo, nuvola",
+    "flour_amount": 1000,
+    "water": 650,
+    "yeast_type": "lievito di birra fresco",
+    "yeast_amount": 25,
+    "salt": 20,
+    "sugar": 15,
+    "oil": 0,
+    "temperature": 20,
+    "date": "12-12-2023",
+    "picture": "pizza-1.jpg",
+    "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut lectus arcu bibendum at. Quam quisque id diam vel quam. Iaculis eu non diam phasellus vestibulum lorem sed risus ultricies. Vitae aliquet nec ullamcorper sit amet risus nullam eget. Consectetur adipiscing elit ut aliquam purus sit amet. Sodales ut eu sem integer vitae. Commodo odio aenean sed adipiscing diam donec adipiscing. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices. Odio facilisis mauris sit amet massa vitae tortor condimentum. Mattis pellentesque id nibh tortor id aliquet lectus proin. Magna eget est lorem ipsum dolor sit. Nulla at volutpat diam ut. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt. Volutpat odio facilisis mauris sit. Nunc sed velit dignissim sodales ut eu sem integer. Mauris pharetra et ultrices neque ornare aenean euismod elementum nisi. Sed cras ornare arcu dui vivamus. Tellus mauris a diam maecenas sed enim ut sem viverra. Ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet. Aliquam sem et tortor consequat id porta nibh venenatis. Risus in hendrerit gravida rutrum quisque non tellus. Ornare quam viverra orci sagittis. Nibh tellus molestie nunc non blandit massa enim. In egestas erat imperdiet sed euismod nisi porta. Faucibus turpis in eu mi bibendum neque. Pellentesque sit amet porttitor eget. Justo donec enim diam vulputate ut pharetra sit amet."
+  },
+  {
+    "flour_type": "barilla",
+    "flour_amount": 700,
+    "water": 450,
+    "yeast_type": "lievito di birra fresco",
+    "yeast_amount": 15,
+    "salt": 150,
+    "sugar": 0,
+    "oil": 0,
+    "temperature": 19,
+    "date": "19-12-2023",
+    "picture": "pizza-2.jpg",
+    "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut lectus arcu bibendum at. Quam quisque id diam vel quam. Iaculis eu non diam phasellus vestibulum lorem sed risus ultricies. Vitae aliquet nec ullamcorper sit amet risus nullam eget. "
+  },
+  {
+    "flour_type": "caputo, rossa",
+    "flour_amount": 1000,
+    "water": 600,
+    "yeast_type": "lievito di birra fresco",
+    "yeast_amount": 25,
+    "salt": 25,
+    "sugar": 0,
+    "oil": 0,
+    "temperature": 22,
+    "date": "28-12-2023",
+    "picture": "pizza-3.jpg",
+    "procedure": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut lectus arcu bibendum at. Quam quisque id diam vel quam. Iaculis eu non diam phasellus vestibulum lorem sed risus ultricies. Vitae aliquet nec ullamcorper sit amet risus nullam eget. Consectetur adipiscing elit ut aliquam purus sit amet. Sodales ut eu sem integer vitae. Commodo odio aenean sed adipiscing diam donec adipiscing. Bibendum ut tristique et egestas quis ipsum suspendisse ultrices. Odio facilisis mauris sit amet massa vitae tortor condimentum. Mattis pellentesque id nibh tortor id aliquet lectus proin. Magna eget est lorem ipsum dolor sit. Nulla at volutpat diam ut. Laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt. Volutpat odio facilisis mauris sit. Nunc sed velit dignissim sodales ut eu sem integer. Mauris pharetra et ultrices neque ornare aenean euismod elementum nisi. Sed cras ornare arcu dui vivamus."
+  }
+]
