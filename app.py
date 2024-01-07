@@ -1,7 +1,7 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, IntegerField, DecimalField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -48,24 +48,48 @@ class Experiment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 # Create the users table
-   class User(db.Model):
-      id = db.Column(db.Integer, primary_key=True)
-      username = db.Column(db.String(50), nullable=False)
-      password = db.Column(db.String(100), nullable=False)
+class User(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  username = db.Column(db.String(50), nullable=False)
+  password = db.Column(db.String(100), nullable=False)
 
-      experiments = db.relationship('Experiment', backref='user')
+  experiments = db.relationship('Experiment', backref='user')
    
 # Create a Form Class
 class AddExperimentForm(FlaskForm):
   flour_type = StringField("Type of flour", validators=[DataRequired()])
+  flour_amount = IntegerField("gr.", validators=[DataRequired()])
+  water_amount = IntegerField("water", validators=[DataRequired()])
+  yeast_type = StringField("Type of yeast")
+  yeast_amount = DecimalField("yeast gr.")
+  salt_amount = DecimalField("salt")
+  sugar_amount = DecimalField("sugar")
+  oil_amount = DecimalField("oil")
+  temperature = DecimalField("Temperature ℃")
+  maturation_time = DecimalField("Maturation Time")
+  procedure = TextAreaField("Procedure")
+  result_vote = IntegerField("Result Vote")
+  result_comment = TextAreaField("Result comment")
   submit = SubmitField("Submit")
 
-# # json file as temporary database
-# def db():
-#     filename = os.path.join(app.static_folder, 'db.json')
-#     with open(filename) as db:
-#         data = json.load(db)
-#         return data
+#Create a login form
+  class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
+
+
+#              ______    _______  __   __  _______  _______  _______ 
+#             |    _ |  |       ||  | |  ||       ||       ||       |
+#             |   | ||  |   _   ||  | |  ||_     _||    ___||  _____|
+#             |   |_||_ |  | |  ||  |_|  |  |   |  |   |___ | |_____ 
+#             |    __  ||  |_|  ||       |  |   |  |    ___||_____  |
+#             |   |  | ||       ||       |  |   |  |   |___  _____| |
+#             |___|  |_||_______||_______|  |___|  |_______||_______|
+
+  
+
 
 #home - home - home - home - home - home - home - home - home - home 
 #home - home - home - home - home - home - home - home - home - home 
@@ -79,13 +103,35 @@ def index():
 #add-experiment - add-experiment - add-experiment - add-experiment
 @app.route("/add-experiment", methods=['GET','POST'])
 def addExperiment():
-  name = None
+  
   form = AddExperimentForm()
-  # validate form
+
   if form.validate_on_submit():
-    name = form.name.data
-    form.name.data = ""
-  return render_template("add_experiment.html", name=name, form=form)
- 
+      # Create a new Experiment instance with data from the form
+      new_experiment = Experiment(
+          flour_type=form.flour_type.data,
+          flour_amount=form.flour_amount.data,
+          water_amount=form.water_amount.data,
+          yeast_type=form.yeast_type.data,
+          yeast_amount=form.yeast_amount.data,
+          salt_amount=form.salt_amount.data,
+          sugar_amount=form.sugar_amount.data,
+          oil_amount=form.oil_amount.data,
+          temperature=form.temperature.data,
+          maturation_time=form.maturation_time.data,
+          procedure=form.procedure.data,
+          result_vote=form.result_vote.data,
+          result_comment=form.result_comment.data,
+          user_id = 1  # Update with the actual user ID when you implement user authentication
+      )
+
+      # Add the new experiment to the database
+      db.session.add(new_experiment)
+      db.session.commit()
+
+      return redirect(url_for('index'))  # Redirect to the home page after successful form submission
+
+  return render_template("add_experiment.html", form=form)
+
 
 
