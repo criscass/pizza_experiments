@@ -1,32 +1,51 @@
 import os
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, flash, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DecimalField, TextAreaField, PasswordField, BooleanField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired, Length, ValidationError,EqualTo, Optional, Email
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from flask import json
+from datetime import datetime, timedelta
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_bcrypt import Bcrypt
+
+
+
+
 
 
 app = Flask(__name__)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(port=8000, debug=True)
 
-#Add database
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///experiments.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=365) #change remember me time
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
+app.config['REMEMBER_COOKIE_SECURE'] = False
+
 
 #Initialize the database
 db = SQLAlchemy(app)
 
-#The following line needs to run when creating the database
-# app.app_context().push()
-
-
+bcrypt = Bcrypt(app)
 # Form secret key
 # TODO: Change this in production and hide it in a env variable
 app.config['SECRET_KEY'] = "V1hpvPBvka3GlrQ/61Sukg=="
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(user_id):
+  return User.query.get(int(user_id))
+  
+
+# Database - Database - Database - Database - Database - Database - Database
+# Database - Database - Database - Database - Database - Database - Database
 
 # Create the experiments table (all amounts are in grams)
 class Experiment(db.Model):
@@ -48,36 +67,68 @@ class Experiment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 # Create the users table
-class User(db.Model):
+class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(50), nullable=False)
+  username = db.Column(db.String(25), nullable=False, unique=True)
+  email = db.Column(db.String(30), nullable=False, unique=True)
   password = db.Column(db.String(100), nullable=False)
 
   experiments = db.relationship('Experiment', backref='user')
+
+
+ # Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms
+ # Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms - Forms
    
 # Create a Form Class
 class AddExperimentForm(FlaskForm):
-  flour_type = StringField("Type of flour", validators=[DataRequired()])
-  flour_amount = IntegerField("gr.", validators=[DataRequired()])
-  water_amount = IntegerField("water", validators=[DataRequired()])
-  yeast_type = StringField("Type of yeast")
-  yeast_amount = DecimalField("yeast gr.")
-  salt_amount = DecimalField("salt")
-  sugar_amount = DecimalField("sugar")
-  oil_amount = DecimalField("oil")
-  temperature = DecimalField("Temperature ℃")
-  maturation_time = DecimalField("Maturation Time")
-  procedure = TextAreaField("Procedure")
-  result_vote = IntegerField("Result Vote")
-  result_comment = TextAreaField("Result comment")
+  flour_type = StringField("Type of flour", validators=[InputRequired()])
+  flour_amount = IntegerField("grams", validators=[InputRequired()])
+  water_amount = IntegerField("water", validators=[InputRequired()])
+  yeast_type = StringField("Type of yeast", validators=[Optional()])
+  yeast_amount = DecimalField("grams", validators=[Optional()])
+  salt_amount = DecimalField("salt", validators=[Optional()])
+  sugar_amount = DecimalField("sugar", validators=[Optional()])
+  oil_amount = DecimalField("oil", validators=[Optional()])
+  temperature = DecimalField("Temperature ℃", validators=[Optional()])
+  maturation_time = DecimalField("Maturation Time", validators=[Optional()])
+  procedure = TextAreaField("Procedure", validators=[Optional()])
+  result_vote = IntegerField("Vote", validators=[Optional()])
+  result_comment = TextAreaField("Result comment", validators=[Optional()])
   submit = SubmitField("Submit")
 
 #Create a login form
-  class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
+class LoginForm(FlaskForm):
+  email = StringField('Email', validators=[Email(message='You need to input a valid email')])
+  password = PasswordField('Password', validators=[DataRequired(),InputRequired(),Length(min=8,max=20)])
+  remember_me = BooleanField('Remember Me')
+  submit = SubmitField('Login')
+
+  def validate_email(self, email):
+    existing_email = User.query.filter_by(email=email.data).first()
+    
+    if not existing_email:
+      raise ValidationError("This email hasn't been registered")
+  
+
+#Create a registration form
+class RegisterForm(FlaskForm):
+  username = StringField('Username', validators=[DataRequired(),InputRequired(),Length(min=4,max=20)])
+  email = StringField('Email', validators=[DataRequired(), Email(message='You need to input a valid email')])
+  password = PasswordField('Password', validators=[DataRequired(),Length(min=8,max=20)])
+  confirm  = PasswordField('Repeat Password', validators=[DataRequired(),EqualTo('password', message='Passwords must match')])
+  submit = SubmitField('Register')
+
+  def validate_email(self, email):
+    existing_email = User.query.filter_by(email=email.data).first()
+    
+    if existing_email:
+      raise ValidationError("This email has already been used.")
+    
+  def validate_username(self, username):
+    existing_username = User.query.filter_by(username=username.data).first()
+    
+    if existing_username:
+      raise ValidationError("This username already exists, please choose another one.")  
 
 
 #              ______    _______  __   __  _______  _______  _______ 
@@ -88,24 +139,70 @@ class AddExperimentForm(FlaskForm):
 #             |   |  | ||       ||       |  |   |  |   |___  _____| |
 #             |___|  |_||_______||_______|  |___|  |_______||_______|
 
-  
+ 
 
 
 #home - home - home - home - home - home - home - home - home - home 
 #home - home - home - home - home - home - home - home - home - home 
 @app.route("/")
+@login_required
 def index():
-  # data=db()
-  # i = 2
-  return render_template("index.html")
+  experiments = Experiment.query.filter_by(user_id = current_user.id)
+  return render_template("index.html", experiments=experiments)
+
+#login - login - login - login - login - login - login - login - login
+#login - login - login - login - login - login - login - login - login
+@app.route("/login", methods=['GET','POST'])
+def login():
+  if current_user.is_authenticated:
+    return redirect(url_for("index"))
+  form = LoginForm()
+  if form.validate_on_submit():
+    user = User.query.filter_by(email=form.email.data).first()
+    if user:
+      if bcrypt.check_password_hash(user.password, form.password.data):
+
+        login_user(user, remember=form.remember_me.data)
+        flash('Logged in successfully.')
+        return redirect(url_for("index"))
+  return render_template("login.html", form=form)
+
+
+
+#logout - logout - logout - logout - logout - logout - logout - logout - logout
+#logout - logout - logout - logout - logout - logout - logout - logout - logout
+@app.route("/logout", methods=['GET','POST'])
+@login_required
+def logout():
+  logout_user()
+  return redirect(url_for('login'))
+
+
+#register - register - register - register - register - register - register
+#register - register - register - register - register - register - register
+@app.route("/register", methods=['GET','POST'])
+def register():
+  form = RegisterForm()
+
+  if form.validate_on_submit():
+    hashed_password = bcrypt.generate_password_hash(form.password.data)
+    new_user = User(username=form.username.data, email=form.email.data, password=hashed_password, remember_me=form.remember_me.data)
+    db.session.add(new_user)
+    db.session.commit()
+    return redirect(url_for('login'))
+  else:
+    print(form.errors.items())
+  
+  return render_template("register.html", form=form)
 
 #add-experiment - add-experiment - add-experiment - add-experiment
 #add-experiment - add-experiment - add-experiment - add-experiment
 @app.route("/add-experiment", methods=['GET','POST'])
+@login_required
 def addExperiment():
   
   form = AddExperimentForm()
-
+  
   if form.validate_on_submit():
       # Create a new Experiment instance with data from the form
       new_experiment = Experiment(
@@ -122,9 +219,9 @@ def addExperiment():
           procedure=form.procedure.data,
           result_vote=form.result_vote.data,
           result_comment=form.result_comment.data,
-          user_id = 1  # Update with the actual user ID when you implement user authentication
+          user_id = current_user.id
       )
-
+     
       # Add the new experiment to the database
       db.session.add(new_experiment)
       db.session.commit()

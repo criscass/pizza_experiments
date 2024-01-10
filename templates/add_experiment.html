@@ -5,75 +5,124 @@
 {% block content %}
 
 
-<form action="/add-experiment" method="post" novalidate>
+<form action="/add-experiment" method="post" class="needs-validation" novalidate>
   {{ form.csrf_token }}
   <div class="container text-center mt-3">
     <div class="row">
       <div class="col-9">
-       {{ form.flour_type.label(class="form-label") }}
-        {{ form.flour_type(class="form-control") }}
+        <div class="form-floating">
+          {{ form.flour_type(class="form-control", placeholder="caputo rossa") }}
+          {{ form.flour_type.label() }}
+        </div>
       </div>
       <div class="col-3">
-      {{ form.flour_amount.label(class="form-label") }}
-        {{ form.flour_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.flour_amount(class="form-control", placeholder="grams") }}
+          {{ form.flour_amount.label() }}
+        </div>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col-3">
-        {{ form.water_amount.label(class="form-label") }}
-        {{ form.water_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.water_amount(class="form-control", placeholder="water") }}
+          {{ form.water_amount.label() }}
+        </div>
       </div>
        <div class="col-6">
-        {{ form.yeast_type.label(class="form-label") }}
-        {{ form.yeast_type(class="form-control") }}
+        <div class="form-floating">
+          {{ form.yeast_type(class="form-control", placeholder="yeast type") }}
+          {{ form.yeast_type.label() }}
+        </div>
       </div>
        <div class="col-3">
-        {{ form.yeast_amount.label(class="form-label") }}
-        {{ form.yeast_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.yeast_amount(class="form-control", placeholder="grams") }}
+          {{ form.yeast_amount.label() }}
+        </div>
       </div>
     </div>
     <div class="row mt-3">
        <div class="col-4">
-        {{ form.salt_amount.label(class="form-label") }}
-        {{ form.salt_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.salt_amount(class="form-control", placeholder="salt") }}
+          {{ form.salt_amount.label() }}
+        </div>
       </div>
        <div class="col-4">
-        {{ form.sugar_amount.label(class="form-label") }}
-        {{ form.sugar_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.sugar_amount(class="form-control", placeholder="sugar") }}
+          {{ form.sugar_amount.label() }}
+        </div>
       </div>
        <div class="col-4">
-        {{ form.oil_amount.label(class="form-label") }}
-        {{ form.oil_amount(class="form-control") }}
+        <div class="form-floating">
+          {{ form.oil_amount(class="form-control", placeholder="oil") }}
+          {{ form.oil_amount.label() }}
+        </div>
        </div>
     </div>
      <div class="row mt-3">
        <div class="col-6">
-        {{ form.temperature.label(class="form-label") }}
-        {{ form.temperature(class="form-control") }}
+        <div class="form-floating">
+          {{ form.temperature(class="form-control", placeholder="temperature") }}
+          {{ form.temperature.label() }}
+        </div>
       </div>
         <div class="col-6">
-        {{ form.maturation_time.label(class="form-label") }}
-        {{ form.maturation_time(class="form-control") }}
+        <div class="form-floating">
+          {{ form.maturation_time(class="form-control", placeholder="maturation time") }}
+          {{ form.maturation_time.label() }}
+        </div>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-12">
-        {{ form.procedure.label(class="form-label") }}
-        {{ form.procedure(class="form-control") }}
+        <div class="form-floating">
+          {{ form.procedure(class="form-control", placeholder="procedure") }}
+          {{ form.procedure.label() }}
+        </div>
         </div>
     </div>
     <div class="row mt-3">
        <div class="col-9">
-        {{ form.result_comment.label(class="form-label") }}
-        {{ form.result_comment(class="form-control") }}
+        <div class="form-floating">
+          {{ form.result_comment(class="form-control", placeholder="comment") }}
+          {{ form.result_comment.label() }}
+        </div>
       </div>
         <div class="col-3" style="height:90px;">
-        {{ form.result_vote.label(class="form-label") }}
-        {{ form.result_vote(class="form-control") }}
+        <div class="form-floating">
+          {{ form.result_vote(class="form-control", placeholder="vote") }}
+          {{ form.result_vote.label() }}
+        </div>
         </div>
     </div>
-        {{ form.submit(class="btn btn-secondary mt-5") }}
-  </div>
+        <div class="d-grid">
+          {{ form.submit(class="btn btn-secondary mt-5") }}
+            </div>
+        </div>
 </form>
+
+<script>
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
 
 {% endblock %}
