@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, session
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DecimalField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, InputRequired, Length, ValidationError,EqualTo, Optional, Email
@@ -90,7 +90,7 @@ class AddExperimentForm(FlaskForm):
   sugar_amount = DecimalField("sugar", validators=[Optional()])
   oil_amount = DecimalField("oil", validators=[Optional()])
   temperature = DecimalField("Temperature ℃", validators=[Optional()])
-  maturation_time = DecimalField("Maturation Time", validators=[Optional()])
+  maturation_time = DecimalField("Maturation (hours)", validators=[Optional()])
   procedure = TextAreaField("Procedure", validators=[Optional()])
   result_vote = IntegerField("Vote", validators=[Optional()])
   result_comment = TextAreaField("Result comment", validators=[Optional()])
@@ -149,6 +149,14 @@ class RegisterForm(FlaskForm):
 def index():
   experiments = Experiment.query.filter_by(user_id = current_user.id)
   return render_template("index.html", experiments=experiments)
+
+# calculator - calculator - calculator - calculator - calculator - calculator
+# calculator - calculator - calculator - calculator - calculator - calculator
+@app.route("/calculator", methods=['GET'])
+@login_required
+def calculator():
+  
+  return render_template("calculator.html")
 
 #login - login - login - login - login - login - login - login - login
 #login - login - login - login - login - login - login - login - login
@@ -230,5 +238,11 @@ def addExperiment():
 
   return render_template("add_experiment.html", form=form)
 
+
+@app.route("/experiment/<experiment_id>", methods=['GET'])
+@login_required
+def experiment(experiment_id):
+  experiment = Experiment.query.filter_by(id = experiment_id)
+  return render_template("experiment.html", exp=experiment)
 
 

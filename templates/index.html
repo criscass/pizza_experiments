@@ -2,18 +2,22 @@
 
 {% block content %}
 
+
+
 {% for exp in experiments %}
 <div class="card mb-3 mt-3" style="max-width: 540px;">
+<a href="{{url_for('experiment', experiment_id=exp.id)}}" class="card-link stretched-link"></a>
   <div class="row g-0">
-    {# <div class="col-md-4">
-      <img src="{{ url_for('static', filename='/images/'+exp.picture) }}" class="img-fluid rounded-start" alt="...">
-    </div> #}
     <div class="col-md-8">
       <div class="card-body">
         {% set hidration = (exp.water_amount*100)//exp.flour_amount %}
         <h5 class="card-title">{{exp.flour_type}} - hidration:  {{hidration}}%</h5>
-        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+        <p class="card-text">{{exp.result_comment | truncate(200)}}</p>
+        <div class="d-flex justify-content-between">
+          <p class="card-text"><small class="text-body-secondary">{{exp.date.strftime("%B-%d-%Y")}}</small></p>
+          <p class="card-text"><small class="text-body-secondary">Vote: {{exp.result_vote}}</small></p>
+        </div>
+        
       </div>
     </div>
   </div>

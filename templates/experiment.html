@@ -1,0 +1,78 @@
+{% extends "layout.html" %} 
+
+{% block content %}
+
+{% for e in exp %}
+<div class="card mb-3 mt-3" style="max-width: 540px;">
+  
+  <div class="card-body">
+    <h5 class="text-center mb-3">{{e.date.strftime("%B-%d-%Y")}}</h5>
+      <div class="d-flex justify-content-evenly">
+       <h3 class="card-title">{{e.flour_type}}</h3>
+          {% set hidration = (e.water_amount*100)//e.flour_amount %}
+        <h3 class="card-title">hidration:  {{hidration}}%</h3>
+      </div>
+    <div>
+      <p class="card-text mt-3 mb-1">Ingredients:</p>
+        <ul>
+          <li>flour: {{e.flour_amount}}gr</li>
+          <li>water: {{e.water_amount}}gr</li>
+
+          {% if (e.yeast_type != "") and (e.yeast_amount != None) %}
+           <li>{{e.yeast_type | truncate(40)}}: {{e.yeast_amount}}gr</li>
+            {% elif e.yeast_type != None and e.yeast_amount == None%}
+              <li>{{e.yeast_type}}</li>
+            {% elif e.yeast_type == "" and e.yeast_amount != None%}
+              <li>Yeast: {{e.yeast_amount}}</li>
+          {% endif %}
+
+          {% if e.salt_amount != None %}
+          <li>salt: {{e.salt_amount}}gr</li>
+          {% endif %}
+
+          {% if e.sugar_amount != None %}
+          <li>sugar: {{e.sugar_amount}}gr</li>
+          {% endif %}
+
+          {% if e.oil_amount != None %}
+          <li>oil: {{e.oil_amount}}gr</li>
+          {% endif %}
+        </ul>
+
+    <div class="d-flex justify-content-evenly mb-5 mt-5">
+      {% if e.temperature != None %}
+      <div class="text-center">
+      <h5>Temperature</h5>
+      <h3>{{e.temperature}}℃</h3>
+    </div>
+    {% endif %}
+    {% if e.maturation_time != None %}
+    <div class="text-center">
+      <h5>Maturation Time</h5>
+      <h3>{{e.maturation_time}} hours</h3>
+    </div>
+    {% endif %}
+      </div>
+    {% if e.maturation_time != None %}
+    </div>
+      <p class="mb-1">Procedure:</p>
+      <p class="card-text">{{e.procedure}}</p>
+    <div class="d-flex justify-content-evenly mb-5 mt-5">
+      <div>
+      <p class="mb-1">Results:</p>
+        <p class="card-text">{{e.result_comment}}</p>
+      </div>
+      <div class="ps-5 d-flex flex-column align-items-center justify-content-end">
+
+        <div class="border border-3 border-secondary rounded-5 p-3 d-flex flex-column align-items-center justify-content-end">
+          <span class="fs-5">Vote</span>
+          <span class="fs-1">{{e.result_vote}}</span>
+        </div>
+      </div>
+    </div>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}
