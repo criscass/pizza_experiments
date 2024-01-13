@@ -4,14 +4,12 @@
 	<div class="card-body">
 		<!-- Pizza balls - Pizza balls - Pizza balls -->
 		<div>
-			<p class="fs-1 text-center">
-				Pizza Balls <span class="fs-6">(250gr each)</span>
-			</p>
+			<p class="fs-1 text-center">Pizza Balls <span class="fs-6">(250gr each)</span></p>
 			<div class="container text-center" style="max-width: 300px">
 				<div class="row">
 					<div class="col-4 d-flex align-items-center">
 						<!-- minus button -->
-						<button class="btn btn-lg btn-secondary p-3">
+						<button class="btn btn-lg btn-secondary p-3" id="btn-balls-minus">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="32"
@@ -20,21 +18,16 @@
 								class="bi bi-dash-lg"
 								viewBox="0 0 16 16"
 							>
-								<path
-									fill-rule="evenodd"
-									d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"
-								/>
+								<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
 							</svg>
 						</button>
 					</div>
-					<div
-						class="col-4 d-flex align-items-center justify-content-center"
-					>
-						<p class="display-3 mb-0">5</p>
+					<div class="col-4 d-flex align-items-center justify-content-center">
+						<p class="display-3 mb-0" id="balls-output">6</p>
 					</div>
 					<div class="col-4 d-flex align-items-center justify-content-end">
 						<!-- plus button -->
-						<button class="btn btn-lg btn-secondary p-3">
+						<button class="btn btn-lg btn-secondary p-3" id="btn-balls-plus">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="32"
@@ -60,7 +53,7 @@
 				<div class="row">
 					<div class="col-4 d-flex align-items-center">
 						<!-- minus button -->
-						<button class="btn btn-lg btn-secondary p-3">
+						<button class="btn btn-lg btn-secondary p-3" id="btn-hidration-minus">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="32"
@@ -69,21 +62,16 @@
 								class="bi bi-dash-lg"
 								viewBox="0 0 16 16"
 							>
-								<path
-									fill-rule="evenodd"
-									d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"
-								/>
+								<path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8" />
 							</svg>
 						</button>
 					</div>
-					<div
-						class="col-4 d-flex align-items-center justify-content-center"
-					>
-						<p class="display-3 mb-0">65%</p>
+					<div class="col-4 d-flex align-items-center justify-content-center">
+						<p class="display-3 mb-0" id="hidration-output">65%</p>
 					</div>
 					<div class="col-4 d-flex align-items-center justify-content-end">
 						<!-- plus button -->
-						<button class="btn btn-lg btn-secondary p-3">
+						<button class="btn btn-lg btn-secondary p-3" id="btn-hidration-plus">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								width="32"
@@ -108,11 +96,64 @@
 		<div class="mt-3">
 			<p class="fs-1 text-center">Ingredients</p>
 			<div class="text-center">
-				<p class="fs-3">Flour: 1000gr</p>
-				<p class="fs-3">Water: 700gr</p>
-				<p class="fs-3">Salt: 25gr</p>
+				<p class="fs-3" id="flourOutput">Flour: 1000gr</p>
+				<p class="fs-3" id="waterOutput">Water: 700gr</p>
+				<p class="fs-3" id="saltOutput">Salt: 25gr</p>
 			</div>
 		</div>
 	</div>
 </div>
+
+<!-- Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript
+Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript - - Javascript -->
+
+<script>
+	"use strict";
+
+	const btnBallsPlus = document.querySelector("#btn-balls-plus");
+	const btnBallsMinus = document.querySelector("#btn-balls-minus");
+
+	const btnHidrationPlus = document.querySelector("#btn-hidration-plus");
+	const btnHidrationMinus = document.querySelector("#btn-hidration-minus");
+
+	const ballsOutput = document.querySelector("#balls-output");
+	const hidrationOutput = document.querySelector("#hidration-output");
+
+	const flourOutput = document.querySelector("#flourOutput");
+	const waterOutput = document.querySelector("#waterOutput");
+	const saltOutput = document.querySelector("#saltOutput");
+
+	let balls = 6;
+	let hidration = 65;
+	let flour = 0;
+	let water = 0;
+	let salt = 0;
+
+	function updateIngredients(balls, hidration) {
+		flour = Math.floor((balls * 250.1) / (hidration / 100 + 1 + 0.017));
+		water = Math.floor((hidration * flour) / 100);
+		salt = Math.floor(flour * 0.017);
+		flourOutput.innerHTML = `Flour: ${flour}gr`;
+		waterOutput.innerHTML = `Water: ${water}gr`;
+		saltOutput.innerHTML = `Salt: ${salt}gr`;
+	}
+	updateIngredients(6, 65);
+
+	function updateBalls(amount) {
+		balls += amount;
+		updateIngredients(balls, hidration);
+		ballsOutput.innerHTML = balls;
+	}
+
+	function updateHidration(amount) {
+		hidration += amount;
+		updateIngredients(balls, hidration);
+		hidrationOutput.innerHTML = `${hidration}%`;
+	}
+
+	btnBallsPlus.addEventListener("click", () => updateBalls(1));
+	btnBallsMinus.addEventListener("click", () => updateBalls(-1));
+	btnHidrationPlus.addEventListener("click", () => updateHidration(1));
+	btnHidrationMinus.addEventListener("click", () => updateHidration(-1));
+</script>
 {% endblock %}

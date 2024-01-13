@@ -6,7 +6,7 @@
 
 {% for exp in experiments %}
 <div class="card mb-3 mt-3" style="max-width: 540px;">
-<a href="{{url_for('experiment', experiment_id=exp.id)}}" class="card-link stretched-link"></a>
+<a href="{{url_for('experiment', id=exp.id)}}" class="card-link stretched-link"></a>
   <div class="row g-0">
     <div class="col-md-8">
       <div class="card-body">

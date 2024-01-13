@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DecimalField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, InputRequired, Length, ValidationError,EqualTo, Optional, Email
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, session
 from datetime import datetime, timedelta
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
@@ -158,6 +158,62 @@ def calculator():
   
   return render_template("calculator.html")
 
+# delete - delete - delete - delete - delete - delete - delete - delete - delete - delete - delete - delete
+# delete - delete - delete - delete - delete - delete - delete - delete - delete - delete - delete - delete
+@app.route("/delete/<int:id>", methods=['GET','POST'])
+@login_required
+def delete(id):
+  experiment_to_delete = Experiment.query.filter_by(id=id).first()
+  try:
+    db.session.delete(experiment_to_delete)
+    db.session.commit()
+    experiments = Experiment.query.filter_by(user_id = current_user.id)
+    return render_template("index.html", experiments=experiments)
+  except:
+    return "There was a problem deleting this experiment"
+  
+
+# Edit experiment - Edit experiment - Edit experiment - Edit experiment - Edit experiment - Edit experiment
+# Edit experiment - Edit experiment - Edit experiment - Edit experiment - Edit experiment - Edit experiment
+@app.route("/experiment/edit/<int:id>", methods=['GET','POST'])
+@login_required
+def edit_experiment(id):
+  experiment = Experiment.query.filter_by(id=id).first()
+  form = AddExperimentForm()
+  if form.validate_on_submit():
+      experiment.flour_type=form.flour_type.data
+      experiment.flour_amount=form.flour_amount.data
+      experiment.water_amount=form.water_amount.data
+      experiment.yeast_type=form.yeast_type.data
+      experiment.yeast_amount=form.yeast_amount.data
+      experiment.salt_amount=form.salt_amount.data
+      experiment.sugar_amount=form.sugar_amount.data
+      experiment.oil_amount=form.oil_amount.data
+      experiment.temperature=form.temperature.data
+      experiment.maturation_time=form.maturation_time.data
+      experiment.procedure=form.procedure.data
+      experiment.result_vote=form.result_vote.data
+      experiment.result_comment=form.result_comment.data
+      #update database
+      db.session.add(experiment)
+      db.session.commit()
+      flash("Experiment has been updated")
+      return redirect(url_for("experiment", id=id))
+  form.flour_type.data = experiment.flour_type
+  form.flour_amount.data = experiment.flour_amount
+  form.water_amount.data = experiment.water_amount
+  form.yeast_type.data = experiment.yeast_type
+  form.yeast_amount.data = experiment.yeast_amount
+  form.salt_amount.data = experiment.salt_amount
+  form.sugar_amount.data = experiment.sugar_amount
+  form.oil_amount.data = experiment.oil_amount
+  form.temperature.data = experiment.temperature
+  form.maturation_time.data = experiment.maturation_time
+  form.procedure.data = experiment.procedure
+  form.result_vote.data = experiment.result_vote
+  form.result_comment.data = experiment.result_comment
+  return render_template('edit_experiment.html', form=form, id=experiment.id)
+
 #login - login - login - login - login - login - login - login - login
 #login - login - login - login - login - login - login - login - login
 @app.route("/login", methods=['GET','POST'])
@@ -194,7 +250,7 @@ def register():
 
   if form.validate_on_submit():
     hashed_password = bcrypt.generate_password_hash(form.password.data)
-    new_user = User(username=form.username.data, email=form.email.data, password=hashed_password, remember_me=form.remember_me.data)
+    new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return redirect(url_for('login'))
@@ -238,11 +294,12 @@ def addExperiment():
 
   return render_template("add_experiment.html", form=form)
 
-
-@app.route("/experiment/<experiment_id>", methods=['GET'])
+# Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment
+# Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment
+@app.route("/experiment/<id>", methods=['GET'])
 @login_required
-def experiment(experiment_id):
-  experiment = Experiment.query.filter_by(id = experiment_id)
+def experiment(id):
+  experiment = Experiment.query.filter_by(id = id).first()
   return render_template("experiment.html", exp=experiment)
 
 
