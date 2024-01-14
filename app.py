@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy, session
 from datetime import datetime, timedelta
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
 
 
 
@@ -29,6 +30,7 @@ app.config['REMEMBER_COOKIE_SECURE'] = False
 
 #Initialize the database
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 bcrypt = Bcrypt(app)
 # Form secret key

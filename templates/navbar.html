@@ -1,40 +1,24 @@
 {% block content %}
-
-<nav
-	class="navbar bg-dark border-bottom border-body navbar-expand-md py-3"
-	data-bs-theme="dark"
->
+<nav class="navbar navbar-expand-lg bg-body-tertiary py-3" data-bs-theme="dark">
 	<div class="container-fluid">
-		<a class="navbar-brand fs-3" href="{{url_for('index')}}"
-			>Pizza Experiments</a
-		>
+		<a class="navbar-brand fs-2" href="{{url_for('index')}}">Pizza Experiments</a>
 		<button
 			class="navbar-toggler"
 			type="button"
 			data-bs-toggle="collapse"
-			data-bs-target="#navbarNav"
-			aria-controls="navbarNav"
+			data-bs-target="#navbarNavAltMarkup"
+			aria-controls="navbarNavAltMarkup"
 			aria-expanded="false"
 			aria-label="Toggle navigation"
 		>
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link fs-2" href="{{url_for('addExperiment')}}"
-						>Add an Experiment</a
-					>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link fs-2" href="{{url_for('calculator')}}"
-						>Calculator</a
-					>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{url_for('logout')}}">Logout</a>
-				</li>
-			</ul>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav">
+				<a class="nav-link fs-2" aria-current="page" href="{{url_for('addExperiment')}}">Add an Experiment</a>
+				<a class="nav-link fs-2" href="{{url_for('calculator')}}">Calcultator</a>
+			</div>
+			<div class="navbar-nav ms-lg-auto"><a class="nav-link fs-4" href="{{url_for('logout')}}">Logout</a></div>
 		</div>
 	</div>
 </nav>
