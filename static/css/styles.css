@@ -1,3 +1,7 @@
+body {
+	font-family: "Roboto Slab", serif;
+}
+
 .card-link {
 	opacity: 0;
 	overflow: hidden;
@@ -11,4 +15,8 @@ button {
 
 .small-label {
 	font-size: 0.7em;
+}
+
+#pizza-logo {
+	font-family: "Gloria Hallelujah", cursive;
 }
