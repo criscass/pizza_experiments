@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash
+from markupsafe import Markup
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, DecimalField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, InputRequired, Length, ValidationError,EqualTo, Optional, Email
@@ -20,8 +21,9 @@ if __name__ == "__main__":
   app.run(port=8000, debug=True)
 
 
+#Change in production
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:civetta76@localhost/experiments'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///experiments.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=365) #change remember me time
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
@@ -57,23 +59,23 @@ class Experiment(db.Model):
    flour_amount = db.Column(db.Integer, nullable=False)
    water_amount = db.Column(db.Integer, nullable=False)
    yeast_type = db.Column(db.String(50))
-   yeast_amount = db.Column(db.Float)
-   salt_amount = db.Column(db.Float)
-   sugar_amount = db.Column(db.Float)
-   oil_amount = db.Column(db.Float)
+   yeast_amount = db.Column(db.Integer)
+   salt_amount = db.Column(db.Integer)
+   sugar_amount = db.Column(db.Integer)
+   oil_amount = db.Column(db.Integer)
    temperature = db.Column(db.Float)
    maturation_time = db.Column(db.Float)
-   procedure = db.Column(db.String(1000))
-   result_vote = db.Column(db.Integer)
-   result_comment = db.Column(db.String(500))
+   procedure = db.Column(db.String(3000))
+   result_vote = db.Column(db.Float)
+   result_comment = db.Column(db.String(1000))
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 # Create the users table
 class User(db.Model, UserMixin):
   id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(25), nullable=False, unique=True)
+  username = db.Column(db.String(30), nullable=False, unique=True)
   email = db.Column(db.String(30), nullable=False, unique=True)
-  password = db.Column(db.String(100), nullable=False)
+  password = db.Column(db.LargeBinary(80), nullable=False)
 
   experiments = db.relationship('Experiment', backref='user')
 
@@ -87,15 +89,16 @@ class AddExperimentForm(FlaskForm):
   flour_amount = IntegerField("grams", validators=[InputRequired()])
   water_amount = IntegerField("water", validators=[InputRequired()])
   yeast_type = StringField("Type of yeast", validators=[Optional()])
-  yeast_amount = DecimalField("grams", validators=[Optional()])
-  salt_amount = DecimalField("salt", validators=[Optional()])
-  sugar_amount = DecimalField("sugar", validators=[Optional()])
-  oil_amount = DecimalField("oil", validators=[Optional()])
+  yeast_amount = IntegerField("grams", validators=[Optional()])
+  salt_amount = IntegerField("salt", validators=[Optional()])
+  sugar_amount = IntegerField("sugar", validators=[Optional()])
+  oil_amount = IntegerField("oil", validators=[Optional()])
   temperature = DecimalField("Temperature ℃", validators=[Optional()])
   maturation_time = DecimalField("Maturation (hours)", validators=[Optional()])
-  procedure = TextAreaField("Procedure", validators=[Optional()])
-  result_vote = IntegerField("Vote", validators=[Optional()])
-  result_comment = TextAreaField("Result comment", validators=[Optional()])
+  label_for_procedure = Markup('Procedure <span class="small-label">(max 3000 characters)</span>')
+  procedure = TextAreaField(label_for_procedure, validators=[Optional(), Length(max=3000)])
+  result_vote = DecimalField("Vote", validators=[Optional()])
+  result_comment = TextAreaField("Result comment (max 1000 characters)", validators=[Optional(), Length(max=1000)])
   submit = SubmitField("Submit")
 
 #Create a login form
@@ -298,7 +301,7 @@ def addExperiment():
 
 # Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment
 # Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment - Experiment
-@app.route("/experiment/<id>", methods=['GET'])
+@app.route("/experiment/<int:id>", methods=['GET'])
 @login_required
 def experiment(id):
   experiment = Experiment.query.filter_by(id = id).first()

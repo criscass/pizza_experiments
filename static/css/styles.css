@@ -8,3 +8,7 @@
 button {
 	touch-action: manipulation;
 }
+
+.small-label {
+	font-size: 0.7em;
+}
