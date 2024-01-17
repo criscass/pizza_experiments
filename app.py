@@ -10,6 +10,8 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+import urllib.parse as up
+import psycopg2
 
 
 
@@ -18,8 +20,7 @@ from dotenv import load_dotenv
 
 app = Flask(__name__)
 
-if __name__ == "__main__":
-  app.run(port=8000, debug=True)
+
 
 load_dotenv()
 
@@ -34,8 +35,15 @@ app.config['REMEMBER_COOKIE_SECURE'] = False
 
 
 #Initialize the database
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+up.uses_netloc.append("postgres")
+url = up.urlparse(os.environ["DATABASE_URL"])
+
+conn = psycopg2.connect(database=url.path[1:],
+user=url.username,
+password=url.password,
+host=url.hostname,
+port=url.port
+)
 
 bcrypt = Bcrypt(app)
 # Form secret key
@@ -50,6 +58,7 @@ login_manager.login_view = "login"
 def load_user(user_id):
   return User.query.get(int(user_id))
   
+db = SQLAlchemy(app)
 
 # Database - Database - Database - Database - Database - Database - Database
 # Database - Database - Database - Database - Database - Database - Database
@@ -309,5 +318,8 @@ def addExperiment():
 def experiment(id):
   experiment = Experiment.query.filter_by(id = id).first()
   return render_template("experiment.html", exp=experiment)
+
+if __name__ == "__main__":
+  app.run()
 
 
