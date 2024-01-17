@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
 
 
@@ -20,14 +21,17 @@ app = Flask(__name__)
 if __name__ == "__main__":
   app.run(port=8000, debug=True)
 
+load_dotenv()
 
 #Change in production
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg://postgres:civetta76@localhost/experiments'
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:civetta76@localhost:5432/experiments"
+# os.getenv("DATABASE_URL")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=365) #change remember me time
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
 app.config['REMEMBER_COOKIE_SECURE'] = False
+
 
 
 #Initialize the database
