@@ -24,8 +24,7 @@ if __name__ == "__main__":
 load_dotenv()
 
 #Change in production
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:civetta76@localhost:5432/experiments"
-# os.getenv("DATABASE_URL")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=365) #change remember me time
@@ -41,7 +40,7 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 # Form secret key
 # TODO: Change this in production and hide it in a env variable
-app.config['SECRET_KEY'] = "V1hpvPBvka3GlrQ/61Sukg=="
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
