@@ -12,6 +12,7 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 import urllib.parse as up
 import psycopg2
+import time
 
 
 
@@ -170,7 +171,6 @@ def index():
 # calculator - calculator - calculator - calculator - calculator - calculator
 # calculator - calculator - calculator - calculator - calculator - calculator
 @app.route("/calculator", methods=['GET'])
-@login_required
 def calculator():
   
   return render_template("calculator.html")

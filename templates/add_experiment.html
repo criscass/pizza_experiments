@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block content %}
 
-<form method="post" class="needs-validation">
+<form method="post" class="needs-validation" novalidate>
 	{{ form.csrf_token }}
 	<div class="container text-center mt-3">
 		<div class="row">
@@ -87,7 +87,6 @@
 <script>
 	(() => {
 		"use strict";
-
 		// Fetch all the forms we want to apply custom Bootstrap validation styles to
 		const forms = document.querySelectorAll(".needs-validation");
 
