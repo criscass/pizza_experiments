@@ -4,7 +4,7 @@
 
 <div class="d-flex justify-content-between">
 	<!-- Delete Button -->
-	<a class="text-secondary ms-2" href="#" onclick="deleteConfirmation({{id}})">
+	<a class="text-secondary ms-2" href="#" onclick="deleteConfirmation({id})">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			width="22"
@@ -150,13 +150,11 @@
 	function deleteConfirmation(id) {
 		let confirmation = confirm("Are you sure you want to delete this experiement?");
 		if (confirmation) {
-			window.location.href = `http://192.168.188.20:5000/delete/${id}`;
+			window.location.href = `https://pizza-diary.onrender.com/delete/${id}`;
 		} else {
-      window.location.href = `http://192.168.188.20:5000/experiment/edit/${id}`;
-    }
+			window.location.href = `https://pizza-diary.onrender.com/experiment/edit/${id}`;
+		}
 	}
 </script>
 
 {% endblock %}
-
-			
