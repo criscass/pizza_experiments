@@ -229,7 +229,7 @@ def edit_experiment(id):
   form.procedure.data = experiment.procedure
   form.result_vote.data = experiment.result_vote
   form.result_comment.data = experiment.result_comment
-  return render_template('edit_experiment.html', form=form, id=experiment.id)
+  return render_template('edit_experiment.html', form=form, id=id, url=os.getenv("EDIT_URL"))
 
 #login - login - login - login - login - login - login - login - login
 #login - login - login - login - login - login - login - login - login
