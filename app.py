@@ -148,6 +148,9 @@ class RegisterForm(FlaskForm):
     
     if existing_username:
       raise ValidationError("This username already exists, please choose another one.")  
+    
+if __name__ == "__main__":
+  app.run(debug=True, port=5000, host='192.168.188.20')
 
 
 #              ______    _______  __   __  _______  _______  _______ 
@@ -320,7 +323,6 @@ def experiment(id):
   experiment = Experiment.query.filter_by(id = id).first()
   return render_template("experiment.html", exp=experiment)
 
-if __name__ == "__main__":
-  app.run()
+
 
 
