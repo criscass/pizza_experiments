@@ -111,7 +111,8 @@ class AddExperimentForm(FlaskForm):
   label_for_procedure = Markup('Procedure <span class="small-label">(max 3000 characters)</span>')
   procedure = TextAreaField(label_for_procedure, validators=[Optional(), Length(max=3000)])
   result_vote = DecimalField("Vote", validators=[Optional()])
-  result_comment = TextAreaField("Result comment (max 1000 characters)", validators=[Optional(), Length(max=1000)])
+  label_for_result_comment = Markup('Results <span class="small-label">(max 1000 characters)</span>')
+  result_comment = TextAreaField(label_for_result_comment, validators=[Optional(), Length(max=1000)])
   submit = SubmitField("Submit")
 
 #Create a login form
