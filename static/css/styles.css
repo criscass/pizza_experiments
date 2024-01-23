@@ -1,5 +1,6 @@
 body {
 	font-family: "Roboto Slab", serif;
+	max-width: 1200px;
 }
 
 .card-link {

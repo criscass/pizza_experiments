@@ -31,7 +31,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=365) #change remember me time
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=365)
-app.config['REMEMBER_COOKIE_SECURE'] = False
+app.config['REMEMBER_COOKIE_SECURE'] = True
 
 
 
