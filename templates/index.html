@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block content %} {% for exp in experiments %}
-<div class="center-text">
+<div>
 	<div class="card mb-3 mt-3" style="max-width: 840px">
 		<a href="{{url_for('experiment', id=exp.id)}}" class="card-link stretched-link"></a>
 		<div class="row g-0 ps-md-5">
